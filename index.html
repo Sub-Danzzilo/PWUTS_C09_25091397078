@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIPTA - Status &amp; Pembayaran</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<aside id="side">
+  <div class="brand"><img src="img/logo.svg" alt="" width="32" height="32">SIPTA</div>
+  <nav>
+    <a href="#" data-page="beranda" class="on">Beranda</a>
+    <a href="#" data-page="konten">Status &amp; Riwayat</a>
+    <a href="#" data-page="form">Unggah Bukti Bayar</a>
+  </nav>
+  <a class="out" href="#">Logout</a>
+</aside>
+<div id="main">
+  <header>
+    <button id="burger" aria-label="Buka menu">&#9776;</button>
+    <h1>SIPTA – Fakultas Vokasi UNESA</h1>
+    <div class="user"><span>JD</span><div>John Doe<small>1234567890</small></div></div>
+  </header>
+  <main id="content">
+    <section class="page">
+      <h2>Selamat datang, John Doe</h2>
+      <p class="mut">Ringkasan pengajuan dan pembayaran Anda.</p>
+      <div class="stats">
+        <div class="stat"><b>5</b>Pengajuan aktif</div>
+        <div class="stat hot"><b>2</b>Menunggu pembayaran</div>
+        <div class="stat"><b>6</b>Transaksi selesai</div>
+      </div>
+      <p><button class="btn" data-go="konten">Lihat status &amp; riwayat</button>
+         <button class="btn ghost" data-go="form">Unggah bukti bayar</button></p>
+    </section>
+  </main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="js/konten.js"></script>
+<script src="js/validasi.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
