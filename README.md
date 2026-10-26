@@ -6,8 +6,8 @@ UTS Pemrograman Web – SIPTA (Sistem Peminjaman dan Sewa Alat dan Ruangan), Fak
 | --- | --- |
 | Nama | Muhammad Riski |
 | NIM | 25091397078 |
-| Kelas | D4 MI 2025C |
-| Kelompok | C09 (SIPTA) |
+| Kelas | 2025C |
+| Kelompok | C09 |
 | Dosen | Ari Kurniawan, S.Kom., M.T. |
 
 ## Bagian yang saya kerjakan
