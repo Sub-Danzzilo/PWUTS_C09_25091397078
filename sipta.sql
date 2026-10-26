@@ -46,8 +46,8 @@ CREATE TABLE pembayaran (
 
 -- Data contoh (password = hash palsu, login bukan bagian alur ini)
 INSERT INTO pengguna VALUES
- (1,'John Doe','1234567890','john@mhs.unesa.ac.id','081200000001','D4 Manajemen Informatika','$2y$10$dummyhashdummyhashdummyhashdummyhashdummyhashdummyhas','mahasiswa'),
- (2,'Admin TU Vokasi',NULL,'admin@vokasi.unesa.ac.id','081200000002','Tata Usaha Fakultas Vokasi','$2y$10$dummyhashdummyhashdummyhashdummyhashdummyhashdummyhas','admin');
+ (1,'Muhammad Riski','25091397078','muhammad.riski@mhs.unesa.ac.id','081234567078','D4 Manajemen Informatika','$2y$10$dummyhashdummyhashdummyhashdummyhashdummyhashdummyhas','mahasiswa'),
+ (2,'Siti Rahmawati',NULL,'siti.rahmawati@vokasi.unesa.ac.id','081298765432','Tata Usaha Fakultas Vokasi','$2y$10$dummyhashdummyhashdummyhashdummyhashdummyhashdummyhas','admin');
 INSERT INTO alat VALUES
  (1,'Proyektor','1080p, 3500 lumens, HDMI x2, USB reader, remote control.',3,3,'baik'),
  (2,'HDMI','Kabel HDMI 1.8 m, mendukung 4K 60Hz.',5,5,'baik'),

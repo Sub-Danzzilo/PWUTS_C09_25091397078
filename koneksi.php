@@ -1,6 +1,6 @@
 <?php
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-$ID_PENGGUNA = 1; // mahasiswa contoh (John Doe); login dikerjakan bagian lain
+$ID_PENGGUNA = 1; // mahasiswa contoh (Muhammad Riski); login dikerjakan bagian lain
 try {
   $db = new mysqli('localhost', 'root', '', 'sipta'); // default Laragon
   $db->set_charset('utf8mb4');
