@@ -3,17 +3,23 @@
   <p class="mut">Pembayaran dilakukan di luar sistem. Admin memverifikasi bukti yang Anda unggah.</p>
   <form id="frm" class="form" action="process.php" method="post" enctype="multipart/form-data" novalidate>
     <label>Transaksi
-      <select name="id_pinjam_ruangan" id="trx"></select><em class="err"></em>
+      <select name="id_pinjam_ruangan" id="trx"></select>
+      <em class="err"></em>
     </label>
     <p class="info" id="info"></p>
     <label>Jumlah dibayar (Rp)
-      <input type="text" inputmode="numeric" name="jumlah_bayar" id="jml" placeholder="contoh: 250000"><em class="err"></em>
+      <input type="text" inputmode="numeric" name="jumlah_bayar" id="jml" placeholder="contoh: 250000">
+      <em class="err"></em>
     </label>
     <label>Bukti pembayaran (JPG, PNG, atau PDF, maks 2 MB)
-      <input type="file" name="bukti" id="bukti" accept=".jpg,.jpeg,.png,.pdf"><em class="err"></em>
+      <input type="file" name="bukti" id="bukti" accept=".jpg,.jpeg,.png,.pdf">
+      <em class="err"></em>
     </label>
     <img id="prev" alt="Pratinjau bukti" hidden>
-    <div class="row"><button type="button" class="btn ghost" id="batal">Batal</button><button class="btn">Kirim bukti</button></div>
+    <div class="row">
+      <button type="button" class="btn ghost" id="batal">Batal</button>
+      <button class="btn">Kirim bukti</button>
+    </div>
     <p id="hasil"></p>
   </form>
 </section>
