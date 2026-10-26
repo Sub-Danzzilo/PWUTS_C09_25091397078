@@ -33,14 +33,14 @@ Validasi form: transaksi wajib dipilih, nominal harus angka dan sama dengan tota
 **Riwayat Transaksi**
 ![Riwayat Transaksi](screenshot/03-riwayat-transaksi.png)
 
-**Form Unggah Bukti Bayar**
-![Form](screenshot/04-form-bukti-bayar.png)
+**Form Unggah Bukti Bayar (kosong)**
+![Form kosong](screenshot/04-form-kosong.png)
+
+**Form terisi**
+![Form terisi](screenshot/05-form-bukti-bayar.png)
 
 **Validasi form (contoh error)**
-![Validasi](screenshot/05-form-validasi-error.png)
-
-**Form berhasil dikirim**
-![Sukses](screenshot/06-form-sukses.png)
+![Validasi](screenshot/06-form-validasi-error.png)
 
 ## Tampilan mobile
 
