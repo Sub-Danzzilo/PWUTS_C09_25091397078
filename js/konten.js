@@ -1,53 +1,95 @@
-var TRX = [
-  {id:'TRX-2610-019',jenis:'Ruangan',item:'Ruang Kuliah 301',status:'menunggu_pembayaran',ajuan:'6 Okt 2026',pinjam:'Sabtu, 10 Okt 2026',ket:'09.00–12.00',total:250000},
-  {id:'TRX-2610-018',jenis:'Ruangan',item:'Auditorium',status:'menunggu_pembayaran',ajuan:'5 Okt 2026',pinjam:'Minggu, 11 Okt 2026',ket:'08.00–16.00',total:1500000,alasan:'Bukti bayar tidak valid: nominal transfer Rp1.000.000 belum sesuai total biaya Rp1.500.000.'},
-  {id:'TRX-2610-021',jenis:'Alat',item:'Kamera DSLR',status:'menunggu',ajuan:'8 Okt 2026',pinjam:'Jumat, 9 Okt 2026',ket:'Rencana kembali 12 Okt 2026'},
-  {id:'TRX-2610-020',jenis:'Ruangan',item:'Ruang Kuliah 302',status:'disetujui',ajuan:'7 Okt 2026',pinjam:'Jumat, 9 Okt 2026',ket:'10.00–12.00 (hari kerja)'},
-  {id:'TRX-2610-017',jenis:'Alat',item:'Tripod',status:'dipinjam',ajuan:'5 Okt 2026',pinjam:'Rabu, 7 Okt 2026',ket:'Rencana kembali 9 Okt 2026'},
-  {id:'TRX-2610-014',jenis:'Alat',item:'Drone',status:'ditolak',ajuan:'5 Okt 2026',pinjam:'9 Okt 2026',ket:'Tidak digunakan',alasan:'Alasan penolakan: Drone sedang dalam perawatan dan tidak tersedia pada tanggal yang diajukan.'},
-  {id:'TRX-2610-016',jenis:'Alat',item:'Kamera DSLR',status:'dikembalikan',ajuan:'2 Okt 2026',pinjam:'5 Okt 2026',ket:'Kembali 7 Okt 2026'},
-  {id:'TRX-2610-015',jenis:'Ruangan',item:'Ruang Kuliah 301',status:'selesai',ajuan:'1 Okt 2026',pinjam:'6 Okt 2026',ket:'09.00–12.00'},
-  {id:'TRX-2610-013',jenis:'Ruangan',item:'Ruang Rapat',status:'ditolak',ajuan:'1 Okt 2026',pinjam:'7 Okt 2026',ket:'13.00–15.00',alasan:'Alasan penolakan: Ruangan digunakan untuk rapat fakultas pada jadwal yang diajukan.'},
-  {id:'TRX-2610-012',jenis:'Ruangan',item:'Aula Vokasi',status:'selesai',ajuan:'29 Sep 2026',pinjam:'4 Okt 2026',ket:'08.00–16.00'},
-  {id:'TRX-2609-028',jenis:'Alat',item:'Proyektor',status:'dikembalikan',ajuan:'28 Sep 2026',pinjam:'30 Sep 2026',ket:'Kembali 2 Okt 2026'}
-];
+var BLN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+var HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
 var LABEL = {menunggu:'Menunggu',disetujui:'Disetujui',dipinjam:'Dipinjam',menunggu_pembayaran:'Menunggu Pembayaran',ditolak:'Ditolak',dikembalikan:'Dikembalikan',selesai:'Selesai'};
-var TUTUP = ['ditolak', 'dikembalikan', 'selesai'];
-function rp(n) { return 'Rp' + n.toLocaleString('id-ID'); }
+var PESAN = {menunggu:'Pengajuan sedang menunggu pemeriksaan admin.',disetujui:'Jadwal peminjaman telah disetujui admin.',dipinjam:'Alat telah diambil. Kembalikan sesuai jadwal.'};
+var TUTUP = ['ditolak','dikembalikan','selesai'];
+var DATA = [];
+
+function esc(s) { return $('<div>').text(s == null ? '' : s).html(); }
+function rp(n) { return 'Rp' + Number(n).toLocaleString('id-ID'); }
+function fmt(d) { if (!d) return '—'; var p = d.substr(0, 10).split('-'); return +p[2] + ' ' + BLN[p[1] - 1] + ' ' + p[0]; }
+function fmtHari(d) { return HARI[new Date(d.substr(0, 10) + 'T00:00:00').getDay()] + ', ' + fmt(d); }
+function jam(t) { return t ? t.substr(0, 5).replace(':', '.') : ''; }
+function kode(t) { return (t.jenis === 'alat' ? 'ALT-' : 'RNG-') + ('0000' + t.id).slice(-4); }
+function jenisLabel(t) { return t.jenis === 'alat' ? 'Alat' : 'Ruangan'; }
 function isTutup(t) { return TUTUP.indexOf(t.status) > -1; }
+function bisaBayar(t) { return t.jenis === 'ruangan' && t.status === 'menunggu_pembayaran' && (!t.pay_status || t.pay_status === 'tidak_valid'); }
+
+function getData(cb) {
+  $.getJSON('data.php').done(function (r) {
+    DATA = r.trx;
+    $('.uname').text(r.user.nama); $('.unim').text(r.user.nomor_induk);
+    $('.uinit').text(r.user.nama.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2));
+    cb(r);
+  }).fail(function () {
+    $('#content').html('<p class="note">Data gagal dimuat. Pastikan Apache dan MySQL Laragon aktif dan sipta.sql sudah diimpor.</p>');
+  });
+}
+
+function kartu(t) {
+  var mid = '<p>' + fmtHari(t.tgl_pinjam) + '</p><small>' + (t.jenis === 'alat'
+    ? 'Rencana kembali: ' + fmt(t.rencana)
+    : jam(t.jam_mulai) + '–' + jam(t.jam_selesai) + ' · ' + (t.jenis_hari === 'akhir_pekan' ? 'Akhir pekan' : 'Hari kerja')) + '</small>';
+  var r = '<span class="badge" data-s="' + t.status + '">' + LABEL[t.status] + '</span>';
+  if (t.status === 'menunggu_pembayaran') {
+    if (t.pay_status === 'tidak_valid')
+      r += '<div class="proof"><b>Bukti bayar tidak valid</b><br><small>' + esc(t.pay_file.split('/').pop()) + ' · ' + fmt(t.pay_tgl) +
+           '</small><br>Nominal yang diunggah ' + rp(t.pay_jumlah) + '. Unggah ulang bukti yang sesuai total biaya.</div>';
+    else r += '<p>' + (t.pay_status === 'menunggu' ? 'Bukti bayar sudah diunggah dan menunggu verifikasi admin.' : 'Belum ada bukti bayar.') + '</p>';
+    r += '<p><small>Total Biaya</small><br><b>' + rp(t.total) + '</b></p>';
+    if (bisaBayar(t)) r += '<button class="btn" data-bayar="' + t.id + '">' + (t.pay_status ? 'Unggah ulang' : 'Unggah bukti bayar') + '</button>';
+  } else r += '<p>' + PESAN[t.status] + '</p>';
+  return '<article class="card"><div><small>' + kode(t) + ' · ' + jenisLabel(t) + '</small><h3>' + esc(t.item) +
+    '</h3><small>Tanggal pengajuan: ' + fmt(t.tgl_pengajuan) + '</small></div><div><small>Tanggal pinjam</small>' + mid +
+    '</div><div>' + r + '</div></article>';
+}
+
+function baris(t) {
+  var alat = t.jenis === 'alat', jd = alat ? '' : '<br><small>' + jam(t.jam_mulai) + '–' + jam(t.jam_selesai) + '</small>';
+  if (t.status === 'ditolak') jd += '<br><small>Jadwal diajukan</small>';
+  var rc = alat ? fmt(t.rencana) : fmt(t.tgl_pinjam) + '<br>' + jam(t.jam_selesai);
+  var ak = t.aktual ? fmt(t.aktual) + (alat ? '' : '<br>' + jam(t.jam_selesai)) : '—<br><small>Tidak digunakan</small>';
+  var h = '<tr><td><b>' + kode(t) + '</b><br><small>Diajukan: ' + fmt(t.tgl_pengajuan) + '</small></td><td>' + jenisLabel(t) +
+    '</td><td><b>' + esc(t.item) + '</b></td><td>' + fmt(t.tgl_pinjam) + jd + '</td><td>' + rc + '</td><td>' + ak +
+    '</td><td><span class="badge" data-s="' + t.status + '">' + LABEL[t.status] + '</span></td></tr>';
+  if (t.alasan) h += '<tr><td colspan="7"><div class="note">Alasan penolakan: ' + esc(t.alasan) + '</div></td></tr>';
+  return h;
+}
 
 function initKonten() {
-  var tab = 'aktif';
-  $('#n-aktif').text(TRX.filter(function (t) { return !isTutup(t); }).length);
-  $('#n-riwayat').text(TRX.filter(isTutup).length);
+  getData(function () {
+    var tab = 'aktif';
+    var aktif = DATA.filter(function (t) { return !isTutup(t); }), tutup = DATA.filter(isTutup);
+    var bayar = aktif.filter(function (t) { return t.status === 'menunggu_pembayaran'; }).length;
+    var tolak = tutup.filter(function (t) { return t.status === 'ditolak'; })[0]; // data sudah urut terbaru
+    $('#n-aktif').text(aktif.length); $('#n-riwayat').text(tutup.length);
 
-  function render() {
-    var j = $('#f-jenis').val(), q = $('#f-cari').val().toLowerCase();
-    var rows = TRX.filter(function (t) {
-      return isTutup(t) === (tab === 'riwayat') && (!j || t.jenis === j) &&
-             (t.id + ' ' + t.item).toLowerCase().indexOf(q) > -1;
-    });
-    var h = rows.map(function (t) {
-      var s = '<article class="card"><div><small>' + t.id + ' · ' + t.jenis + '</small><h3>' + t.item +
-        '</h3><small>Diajukan ' + t.ajuan + '</small></div><div><small>Tanggal pinjam</small><p>' + t.pinjam +
-        '</p><small>' + t.ket + '</small></div><div><span class="badge" data-s="' + t.status + '">' + LABEL[t.status] + '</span>';
-      if (t.alasan) s += '<p class="note">' + t.alasan + '</p>';
-      if (t.status === 'menunggu_pembayaran') {
-        s += '<p>Total biaya <b>' + rp(t.total) + '</b></p><button class="btn" data-bayar="' + t.id + '">' +
-             (t.alasan ? 'Unggah ulang' : 'Unggah bukti bayar') + '</button>';
+    function render() {
+      var j = $('#f-jenis').val(), q = $('#f-cari').val().toLowerCase();
+      var rows = (tab === 'aktif' ? aktif : tutup).filter(function (t) {
+        return (!j || t.jenis === j) && (kode(t) + ' ' + t.item).toLowerCase().indexOf(q) > -1;
+      });
+      var h = '';
+      if (tab === 'aktif') {
+        if (tolak) h += '<div class="banner"><b>Pengajuan terbaru ditolak · ' + kode(tolak) + ' · ' + jenisLabel(tolak) + ' — ' + esc(tolak.item) +
+          '</b><br>Alasan penolakan: ' + esc(tolak.alasan) + '<br><small>Tanggal pinjam: ' + fmt(tolak.tgl_pinjam) +
+          ' · Transaksi sudah ditutup dan masuk Riwayat Transaksi.</small></div>';
+        h += '<div class="sh"><h3>Pengajuan Aktif</h3><small>' + aktif.length + ' transaksi · ' + bayar + ' menunggu pembayaran</small></div>' + rows.map(kartu).join('');
+        $('#foot').html('Pembayaran ruangan Sabtu/Minggu dilakukan di luar sistem. Bukti bayar yang diunggah akan diverifikasi oleh admin.<br>Peminjaman alat dan ruangan hari kerja tidak dikenakan biaya dan tidak memerlukan bukti bayar.');
+      } else {
+        h += '<div class="sh"><h3>Transaksi Tertutup</h3><small>' + tutup.length + ' transaksi tertutup</small></div>' +
+          '<p class="mut">Hanya transaksi Dikembalikan, Selesai, dan Ditolak.</p><div class="tw"><table class="tbl"><thead><tr>' +
+          '<th>ID Transaksi / Nomor Referensi</th><th>Jenis Peminjaman</th><th>Item</th><th>Tanggal Pinjam</th>' +
+          '<th>Tanggal Kembali / Selesai (Rencana)</th><th>Tanggal Kembali / Selesai (Aktual)</th><th>Status Akhir</th></tr></thead><tbody>' +
+          rows.map(baris).join('') + '</tbody></table></div><small>Menampilkan ' + rows.length + ' dari ' + tutup.length + ' transaksi</small>';
+        $('#foot').html('Alat: tanggal kembali rencana dan aktual. Ruangan: tanggal serta jam selesai penggunaan, bukan pengembalian alat.<br>Ditolak: jadwal yang diajukan tetap tercatat; tanggal aktual — karena peminjaman tidak digunakan.');
       }
-      return s + '</div></article>';
-    }).join('');
-    $('#list').html(h);
-    $('#kosong').prop('hidden', rows.length > 0);
-  }
+      $('#list').html(h); $('#kosong').prop('hidden', rows.length > 0);
+    }
 
-  $('.tab').on('click', function () {
-    tab = $(this).data('tab');
-    $('.tab').removeClass('on'); $(this).addClass('on'); render();
+    $('.tab').on('click', function () { tab = $(this).data('tab'); $('.tab').removeClass('on'); $(this).addClass('on'); render(); });
+    $('#f-jenis').on('change', render); $('#f-cari').on('input', render);
+    $('#list').on('click', '[data-bayar]', function () { loadPage('form', $(this).data('bayar')); });
+    render();
   });
-  $('#f-jenis').on('change', render);
-  $('#f-cari').on('input', render);
-  $('#list').on('click', '[data-bayar]', function () { loadPage('form', $(this).data('bayar')); });
-  render();
 }

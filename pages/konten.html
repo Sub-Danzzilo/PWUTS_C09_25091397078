@@ -1,14 +1,15 @@
 <section class="page">
   <h2>Status &amp; Riwayat</h2>
-  <p class="mut">Pantau pengajuan aktif dan lihat transaksi yang sudah ditutup.</p>
+  <p class="mut">Pantau pengajuan aktif dan lihat transaksi peminjaman yang sudah ditutup.</p>
   <div class="tabs">
     <button class="tab on" data-tab="aktif">Status Berjalan <b id="n-aktif">0</b></button>
     <button class="tab" data-tab="riwayat">Riwayat Transaksi <b id="n-riwayat">0</b></button>
   </div>
   <div class="filters">
-    <select id="f-jenis"><option value="">Semua jenis</option><option>Alat</option><option>Ruangan</option></select>
+    <select id="f-jenis"><option value="">Semua jenis</option><option value="alat">Alat</option><option value="ruangan">Ruangan</option></select>
     <input type="text" id="f-cari" placeholder="Cari ID atau nama item">
   </div>
   <div id="list"></div>
   <p id="kosong" class="mut" hidden>Tidak ada transaksi yang cocok. Ubah filter atau kata kunci.</p>
+  <div class="foot" id="foot"></div>
 </section>

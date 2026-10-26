@@ -20,19 +20,23 @@
   <header>
     <button id="burger" aria-label="Buka menu">&#9776;</button>
     <h1>SIPTA – Fakultas Vokasi UNESA</h1>
-    <div class="user"><span>JD</span><div>John Doe<small>1234567890</small></div></div>
+    <div class="user"><span class="uinit">JD</span><div><b class="uname">John Doe</b><small class="unim"></small></div></div>
   </header>
   <main id="content">
     <section class="page">
-      <h2>Selamat datang, John Doe</h2>
-      <p class="mut">Ringkasan pengajuan dan pembayaran Anda.</p>
+      <h2>Beranda</h2>
+      <h3 class="welcome">Selamat datang, <span class="uname"></span>!</h3>
+      <p class="mut">Lihat status peminjaman dan aktivitas terkini Anda.</p>
       <div class="stats">
-        <div class="stat"><b>5</b>Pengajuan aktif</div>
-        <div class="stat hot"><b>2</b>Menunggu pembayaran</div>
-        <div class="stat"><b>6</b>Transaksi selesai</div>
+        <div class="stat"><small>Menunggu Diproses</small><b id="s-menunggu">0</b><small>Pengajuan Alat/Ruangan</small></div>
+        <div class="stat hot"><small>Menunggu Pembayaran</small><b id="s-bayar">0</b><small>Ruangan Akhir Pekan</small></div>
+        <div class="stat"><small>Alat Dipinjam</small><b id="s-pinjam">0</b><small>Saat ini sedang dipinjam</small></div>
       </div>
-      <p><button class="btn" data-go="konten">Lihat status &amp; riwayat</button>
-         <button class="btn ghost" data-go="form">Unggah bukti bayar</button></p>
+      <h3>Aktivitas Terkini</h3>
+      <div class="tw"><table class="tbl">
+        <thead><tr><th>Jenis Peminjaman</th><th>Tanggal Pengajuan</th><th>Keperluan</th><th>Status</th></tr></thead>
+        <tbody id="aktivitas"></tbody>
+      </table></div>
     </section>
   </main>
 </div>
