@@ -49,15 +49,14 @@ INSERT INTO pengguna VALUES
  (1,'John Doe','1234567890','john@mhs.unesa.ac.id','081200000001','D4 Manajemen Informatika','$2y$10$dummyhashdummyhashdummyhashdummyhashdummyhashdummyhas','mahasiswa'),
  (2,'Admin TU Vokasi',NULL,'admin@vokasi.unesa.ac.id','081200000002','Tata Usaha Fakultas Vokasi','$2y$10$dummyhashdummyhashdummyhashdummyhashdummyhashdummyhas','admin');
 INSERT INTO alat VALUES
- (1,'Kamera DSLR','24.2MP, APS-C, ISO 100-25600, 1080p 60fps, kit lensa 18-55mm.',3,3,'baik'),
- (2,'Drone','4K 30fps, 3-axis gimbal, 30 menit flight time, remote control.',1,1,'baik'),
- (3,'Proyektor','1080p, 3500 lumens, HDMI x2, USB reader, remote control.',1,0,'baik'),
- (4,'Lensa 50mm f/1.8','Prime lens, aperture f/1.8-16, manual focus ring, mount EF-S.',2,2,'baik'),
- (5,'Tripod','Max load 5kg, 3-section leg, panhead, quick release plate.',6,5,'baik'),
- (6,'Mikrofon Lavalier','Wireless lavalier, receiver 1/4", battery life 8 jam, windscreen.',1,0,'baik');
+ (1,'Proyektor','1080p, 3500 lumens, HDMI x2, USB reader, remote control.',3,3,'baik'),
+ (2,'HDMI','Kabel HDMI 1.8 m, mendukung 4K 60Hz.',5,5,'baik'),
+ (3,'Stop Kontak','Stop kontak 5 lubang dengan kabel 5 m dan saklar pengaman.',6,6,'baik'),
+ (4,'Speaker','Speaker aktif portabel, input AUX/Bluetooth, daya 100 W.',2,2,'baik'),
+ (5,'Mic','Mikrofon nirkabel genggam, receiver 1/4", baterai 8 jam.',4,3,'baik');
 INSERT INTO ruangan VALUES
- (1,'Ruang Kuliah 301',40,250000,'tersedia'),(2,'Auditorium',200,1500000,'tersedia'),(3,'Ruang Rapat',20,200000,'tidak tersedia'),
- (4,'Ruang Kuliah 302',40,250000,'tersedia'),(5,'Aula Vokasi',100,750000,'tersedia'),(6,'Ruang Seminar',60,500000,'tidak tersedia');
+ (1,'Auditorium K10',200,1500000,'tersedia'),(2,'K2.01.03',40,250000,'tersedia'),(3,'K2.01.04',40,250000,'tidak tersedia'),
+ (4,'K2.02.04',40,250000,'tersedia'),(5,'K2.02.05',40,250000,'tersedia'),(6,'K10.02.09',40,250000,'tersedia'),(7,'K10.02.05',40,250000,'tersedia');
 INSERT INTO fasilitas_ruangan (id_ruangan,nama_fasilitas,jumlah)
  SELECT r.id_ruangan, f.n, 1 FROM ruangan r JOIN (SELECT 'Proyektor' n UNION SELECT 'AC' UNION SELECT 'Papan Tulis') f;
 
@@ -65,17 +64,17 @@ INSERT INTO peminjaman_alat VALUES
  (1,1,2,'2026-09-28 09:00:00','2026-09-30','2026-10-02','2026-10-02','Presentasi tugas kuliah','dikembalikan',NULL),
  (2,1,2,'2026-10-05 10:00:00','2026-10-07','2026-10-09',NULL,'Dokumentasi kegiatan kelas','dipinjam',NULL),
  (3,1,2,'2026-10-02 08:30:00','2026-10-05','2026-10-07','2026-10-07','Proyek tugas akhir','dikembalikan',NULL),
- (4,1,2,'2026-10-05 13:00:00','2026-10-09','2026-10-10',NULL,'Pengambilan footage','ditolak','Drone sedang dalam perawatan dan tidak tersedia pada tanggal yang diajukan.'),
+ (4,1,2,'2026-10-05 13:00:00','2026-10-09','2026-10-10',NULL,'Acara kelas terbuka','ditolak','Speaker sedang dalam perawatan dan tidak tersedia pada tanggal yang diajukan.'),
  (5,1,NULL,'2026-10-08 09:15:00','2026-10-09','2026-10-12',NULL,'Proyek tugas akhir','menunggu',NULL);
-INSERT INTO detail_peminjaman_alat (id_pinjam_alat,id_alat,jumlah) VALUES (1,3,1),(2,5,1),(3,1,1),(4,2,1),(5,1,1);
+INSERT INTO detail_peminjaman_alat (id_pinjam_alat,id_alat,jumlah) VALUES (1,2,1),(2,5,1),(3,1,1),(4,4,1),(5,1,1);
 
 INSERT INTO peminjaman_ruangan VALUES
- (1,1,5,2,'2026-09-29 09:00:00','2026-10-04','08:00:00','16:00:00','Workshop akhir pekan','surat/aula.pdf','akhir_pekan',750000,'selesai',NULL),
- (2,1,1,2,'2026-10-01 09:00:00','2026-10-06','09:00:00','12:00:00','Pertemuan kelompok','surat/k301.pdf','hari_kerja',0,'selesai',NULL),
- (3,1,3,2,'2026-10-01 11:00:00','2026-10-07','13:00:00','15:00:00','Rapat organisasi','surat/rapat.pdf','hari_kerja',0,'ditolak','Ruangan digunakan untuk rapat fakultas pada jadwal yang diajukan.'),
- (4,1,1,2,'2026-10-06 09:30:00','2026-10-10','09:00:00','12:00:00','Workshop persiapan tugas akhir untuk 35 mahasiswa Fakultas Vokasi.','surat/ws.pdf','akhir_pekan',250000,'menunggu_pembayaran',NULL),
- (5,1,2,2,'2026-10-05 14:00:00','2026-10-11','08:00:00','16:00:00','Seminar nasional','surat/seminar.pdf','akhir_pekan',1500000,'menunggu_pembayaran',NULL),
- (6,1,4,2,'2026-10-07 10:00:00','2026-10-09','10:00:00','12:00:00','Kelas tambahan','surat/k302.pdf','hari_kerja',0,'disetujui',NULL);
+ (1,1,7,2,'2026-09-29 09:00:00','2026-10-04','08:00:00','16:00:00','Workshop akhir pekan','surat/k100205.pdf','akhir_pekan',250000,'selesai',NULL),
+ (2,1,2,2,'2026-10-01 09:00:00','2026-10-06','09:00:00','12:00:00','Pertemuan kelompok','surat/k20103.pdf','hari_kerja',0,'selesai',NULL),
+ (3,1,3,2,'2026-10-01 11:00:00','2026-10-07','13:00:00','15:00:00','Rapat organisasi','surat/k20104.pdf','hari_kerja',0,'ditolak','Ruangan digunakan untuk rapat fakultas pada jadwal yang diajukan.'),
+ (4,1,2,2,'2026-10-06 09:30:00','2026-10-10','09:00:00','12:00:00','Workshop persiapan tugas akhir untuk 35 mahasiswa Fakultas Vokasi.','surat/ws.pdf','akhir_pekan',250000,'menunggu_pembayaran',NULL),
+ (5,1,1,2,'2026-10-05 14:00:00','2026-10-11','08:00:00','16:00:00','Seminar nasional','surat/seminar.pdf','akhir_pekan',1500000,'menunggu_pembayaran',NULL),
+ (6,1,4,2,'2026-10-07 10:00:00','2026-10-09','10:00:00','12:00:00','Kelas tambahan','surat/k20204.pdf','hari_kerja',0,'disetujui',NULL);
 INSERT INTO pembayaran (id_pinjam_ruangan,id_admin,jumlah_bayar,bukti_pembayaran,tgl_unggah,status_verifikasi,tgl_verifikasi) VALUES
- (1,2,750000,'uploads/bukti-aula.jpg','2026-09-30 10:00:00','valid','2026-09-30 13:00:00'),
+ (1,2,250000,'uploads/bukti-k10205.jpg','2026-09-30 10:00:00','valid','2026-09-30 13:00:00'),
  (5,2,1000000,'uploads/bukti-transfer-auditorium.jpg','2026-10-07 10:00:00','tidak_valid','2026-10-07 14:00:00');
