@@ -1,6 +1,6 @@
 # PWUTS_C09_25091397078
 
-**UTS Pemrograman Web – SIPTA (Sistem Peminjaman dan Sewa Alat dan Ruangan), Fakultas Vokasi UNESA**
+UTS Pemrograman Web – SIPTA (Sistem Peminjaman dan Sewa Alat dan Ruangan), Fakultas Vokasi UNESA
 
 | | |
 | --- | --- |
